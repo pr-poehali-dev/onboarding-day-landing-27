@@ -65,12 +65,16 @@ const schedule = [
 ];
 
 const Index = () => {
+  const TOTAL_SPOTS = 30;
+  const REGISTERED = 12;
+
   const [form, setForm] = useState({
     name: "",
     position: "",
     department: "",
     email: "",
     phone: "",
+    food: "no",
     comment: "",
   });
   const [submitted, setSubmitted] = useState(false);
@@ -785,6 +789,40 @@ const Index = () => {
             <p style={{ color: "rgba(240,240,255,0.65)" }}>
               Заполните форму — и мы пришлём подтверждение на вашу почту
             </p>
+
+            {/* Counter */}
+            <div
+              className="inline-flex items-center gap-3 mt-6 px-5 py-3 rounded-2xl"
+              style={{
+                background: "rgba(255,255,255,0.07)",
+                border: "1px solid rgba(255,255,255,0.12)",
+              }}
+            >
+              <div className="flex gap-1">
+                {Array.from({ length: TOTAL_SPOTS }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-2 h-2 rounded-full transition-all"
+                    style={{
+                      background: i < REGISTERED
+                        ? "linear-gradient(135deg, #FF6B35, #A855F7)"
+                        : "rgba(255,255,255,0.15)",
+                    }}
+                  />
+                ))}
+              </div>
+              <span className="font-montserrat font-bold text-sm" style={{ color: "#F0F0FF" }}>
+                Уже зарегистрировалось:{" "}
+                <span style={{
+                  background: "linear-gradient(135deg, #FF6B35, #A855F7)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}>
+                  {REGISTERED} из {TOTAL_SPOTS} мест
+                </span>
+              </span>
+            </div>
           </div>
 
           <div
@@ -799,22 +837,37 @@ const Index = () => {
             {submitted ? (
               <div className="text-center py-12">
                 <div
-                  className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                  className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6"
                   style={{
                     background: "linear-gradient(135deg, #FF6B35, #A855F7)",
+                    boxShadow: "0 0 60px rgba(255,107,53,0.4)",
                   }}
                 >
-                  <Icon name="Check" size={36} style={{ color: "#fff" }} />
+                  <span className="text-4xl">🎉</span>
                 </div>
                 <h3
-                  className="font-montserrat font-black text-2xl mb-3"
+                  className="font-montserrat font-black text-2xl md:text-3xl mb-4"
                   style={{ color: "#F0F0FF" }}
                 >
-                  Вы зарегистрированы!
+                  Отлично!
                 </h3>
-                <p style={{ color: "rgba(240,240,255,0.6)" }}>
-                  Ждём вас 15 мая. Детали придут на указанную почту.
+                <p className="text-lg mb-2" style={{ color: "rgba(240,240,255,0.85)" }}>
+                  Ждём тебя <strong style={{ color: "#FF6B35" }}>15 мая</strong>.
                 </p>
+                <p style={{ color: "rgba(240,240,255,0.55)" }}>
+                  Письмо с подтверждением придёт на корпоративную почту.
+                </p>
+                <div
+                  className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm"
+                  style={{
+                    background: "rgba(34,197,94,0.15)",
+                    border: "1px solid rgba(34,197,94,0.3)",
+                    color: "#86EFAC",
+                  }}
+                >
+                  <Icon name="CheckCircle" size={16} style={{ color: "#86EFAC" }} />
+                  Место {REGISTERED + 1} из {TOTAL_SPOTS} — твоё!
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -971,6 +1024,42 @@ const Index = () => {
 
                 <div>
                   <label
+                    className="block text-sm font-semibold mb-3"
+                    style={{ color: "rgba(240,240,255,0.8)" }}
+                  >
+                    Пожелания к питанию
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {[
+                      { value: "no", label: "🍽️ Нет", },
+                      { value: "veg", label: "🥗 Вегетарианское" },
+                      { value: "halal", label: "☪️ Халяль" },
+                      { value: "gluten", label: "🌾 Без глютена" },
+                      { value: "other", label: "✏️ Другое" },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setForm({ ...form, food: opt.value })}
+                        className="px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left"
+                        style={{
+                          background: form.food === opt.value
+                            ? "linear-gradient(135deg, rgba(255,107,53,0.25), rgba(168,85,247,0.25))"
+                            : "rgba(255,255,255,0.05)",
+                          border: form.food === opt.value
+                            ? "1.5px solid rgba(255,107,53,0.6)"
+                            : "1.5px solid rgba(255,255,255,0.08)",
+                          color: form.food === opt.value ? "#F0F0FF" : "rgba(240,240,255,0.55)",
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label
                     className="block text-sm font-semibold mb-2"
                     style={{ color: "rgba(240,240,255,0.8)" }}
                   >
@@ -1028,15 +1117,66 @@ const Index = () => {
 
       {/* FOOTER */}
       <footer
-        className="py-10 px-6 text-center"
+        className="py-14 px-6"
         style={{
           borderTop: "1px solid rgba(255,255,255,0.06)",
-          color: "rgba(240,240,255,0.35)",
         }}
       >
-        <p className="text-sm">
-          © 2025 Onboarding Day · Всё для вашего успешного старта
-        </p>
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+          {/* Organizer */}
+          <div
+            className="flex items-center gap-4 p-5 rounded-2xl"
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <div
+              className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 font-montserrat font-black text-white text-lg"
+              style={{ background: "linear-gradient(135deg, #FF6B35, #A855F7)" }}
+            >
+              АП
+            </div>
+            <div>
+              <div className="text-xs mb-1" style={{ color: "rgba(240,240,255,0.4)" }}>
+                Организатор
+              </div>
+              <div className="font-montserrat font-bold text-sm" style={{ color: "#F0F0FF" }}>
+                Анна Петрова
+              </div>
+              <div className="flex flex-wrap gap-3 mt-1.5">
+                <a
+                  href="mailto:hr@company.ru"
+                  className="flex items-center gap-1.5 text-xs transition-all duration-200"
+                  style={{ color: "#FF6B35" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                >
+                  <Icon name="Mail" size={12} style={{ color: "#FF6B35" }} />
+                  hr@company.ru
+                </a>
+                <a
+                  href="https://t.me/anna_hr"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 text-xs transition-all duration-200"
+                  style={{ color: "#A855F7" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                >
+                  <Icon name="Send" size={12} style={{ color: "#A855F7" }} />
+                  @anna_hr
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-sm text-center" style={{ color: "rgba(240,240,255,0.25)" }}>
+            © 2025 Onboarding Day
+            <br />
+            Всё для вашего успешного старта
+          </p>
+        </div>
       </footer>
 
       <style>{`
