@@ -6,53 +6,61 @@ const HERO_IMAGE =
 
 const schedule = [
   {
-    time: "09:00",
-    title: "Сбор и приветственный кофе",
-    desc: "Знакомство с командой, горячие напитки и неформальное общение",
-    icon: "Coffee",
+    time: "10:00",
+    title: "Добро пожаловать",
+    desc: "Знакомство с CEO и историей компании — с чего всё начиналось и куда мы идём",
+    icon: "Handshake",
     color: "#FF6B35",
+    emoji: "👋",
   },
   {
-    time: "10:00",
-    title: "Приветственное слово CEO",
-    desc: "История компании, миссия, ценности и большие цели на горизонте",
-    icon: "Mic",
+    time: "10:30",
+    title: "Тур по офису и командам",
+    desc: "Побываем во всех отделах, познакомимся с коллегами и узнаем, кто чем занимается",
+    icon: "Map",
     color: "#A855F7",
+    emoji: "🗺️",
   },
   {
     time: "11:30",
-    title: "Экскурсия по офису",
-    desc: "Знакомство с пространством, отделами и ключевыми коллегами",
-    icon: "Map",
+    title: "Как мы работаем",
+    desc: "Инструменты, процессы и корпоративная культура — всё, что поможет быстро влиться",
+    icon: "Lightbulb",
     color: "#06B6D4",
+    emoji: "⚙️",
   },
   {
     time: "13:00",
-    title: "Совместный обед",
-    desc: "Обед всей командой — лучшее время для неформального знакомства",
+    title: "Обед",
+    desc: "Совместный обед за счёт компании — лучшее время для неформального общения",
     icon: "UtensilsCrossed",
     color: "#22C55E",
+    emoji: "🍽️",
+    highlight: true,
   },
   {
-    time: "14:30",
-    title: "Воркшоп по корпоративной культуре",
-    desc: "Интерактивное занятие: ценности, правила и способы работы вместе",
-    icon: "Users",
+    time: "14:00",
+    title: "Практика: настройка инструментов",
+    desc: "Настроим рабочее место, доступы и все необходимые сервисы вместе с IT-командой",
+    icon: "Laptop",
     color: "#F59E0B",
+    emoji: "💻",
   },
   {
-    time: "16:00",
-    title: "Q&A с руководителями",
-    desc: "Прямой диалог с лидерами команд — любые вопросы приветствуются",
+    time: "15:00",
+    title: "Q&A с основателями",
+    desc: "Прямой диалог с основателями — любые вопросы, без фильтров и скриптов",
     icon: "MessageCircle",
     color: "#EC4899",
+    emoji: "🎤",
   },
   {
-    time: "17:30",
-    title: "Завершение и фото на память",
-    desc: "Групповое фото, подарки от компании и планы на первые недели",
-    icon: "Camera",
+    time: "15:45",
+    title: "Подведение итогов и подарки",
+    desc: "Планы на первые недели, welcome-kit и фото на память с командой",
+    icon: "Gift",
     color: "#6366F1",
+    emoji: "🎁",
   },
 ];
 
@@ -485,77 +493,234 @@ const Index = () => {
             </h2>
           </div>
 
+          {/* Visual Timeline */}
           <div className="relative">
-            {/* Timeline line */}
+            {/* Vertical line */}
             <div
-              className="absolute left-8 top-0 bottom-0 w-px hidden md:block"
+              className="absolute hidden md:block"
               style={{
+                left: "50%",
+                top: 0,
+                bottom: 0,
+                width: 2,
+                transform: "translateX(-50%)",
                 background:
-                  "linear-gradient(to bottom, transparent, rgba(255,107,53,0.4) 10%, rgba(168,85,247,0.4) 90%, transparent)",
+                  "linear-gradient(to bottom, transparent, #FF6B35 8%, #A855F7 92%, transparent)",
+                opacity: 0.4,
               }}
             />
 
-            <div className="space-y-4">
-              {schedule.map((item, i) => (
+            <div className="space-y-6">
+              {schedule.map((item, i) => {
+                const isLeft = i % 2 === 0;
+                return (
+                  <div
+                    key={i}
+                    className="relative flex items-center gap-0 md:gap-0"
+                  >
+                    {/* LEFT SIDE (desktop) */}
+                    <div
+                      className={`hidden md:flex flex-1 ${isLeft ? "justify-end pr-10" : "justify-end pr-10 opacity-0 pointer-events-none"}`}
+                    >
+                      {isLeft && (
+                        <div
+                          className="max-w-xs w-full p-5 rounded-2xl transition-all duration-300 cursor-default"
+                          style={{
+                            background: item.highlight
+                              ? `linear-gradient(135deg, ${item.color}25, ${item.color}10)`
+                              : "rgba(255,255,255,0.04)",
+                            border: `1px solid ${item.highlight ? item.color + "50" : "rgba(255,255,255,0.07)"}`,
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = "scale(1.02)";
+                            e.currentTarget.style.borderColor = item.color + "80";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = "scale(1)";
+                            e.currentTarget.style.borderColor = item.highlight
+                              ? item.color + "50"
+                              : "rgba(255,255,255,0.07)";
+                          }}
+                        >
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="text-2xl">{item.emoji}</span>
+                            <span
+                              className="font-montserrat font-black text-base"
+                              style={{ color: "#F0F0FF" }}
+                            >
+                              {item.title}
+                            </span>
+                          </div>
+                          <p
+                            className="text-sm leading-relaxed"
+                            style={{ color: "rgba(240,240,255,0.55)" }}
+                          >
+                            {item.desc}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* CENTER DOT + TIME */}
+                    <div className="hidden md:flex flex-col items-center flex-shrink-0 z-10">
+                      <div
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                        style={{
+                          background: `linear-gradient(135deg, ${item.color}30, ${item.color}15)`,
+                          border: `2px solid ${item.color}`,
+                          boxShadow: `0 0 20px ${item.color}40`,
+                        }}
+                      >
+                        <Icon name={item.icon} size={22} style={{ color: item.color }} fallback="Star" />
+                      </div>
+                      <div
+                        className="font-montserrat font-black text-sm mt-2 px-3 py-1 rounded-full"
+                        style={{
+                          background: `${item.color}20`,
+                          color: item.color,
+                          border: `1px solid ${item.color}40`,
+                        }}
+                      >
+                        {item.time}
+                      </div>
+                    </div>
+
+                    {/* RIGHT SIDE (desktop) */}
+                    <div
+                      className={`hidden md:flex flex-1 ${!isLeft ? "justify-start pl-10" : "justify-start pl-10 opacity-0 pointer-events-none"}`}
+                    >
+                      {!isLeft && (
+                        <div
+                          className="max-w-xs w-full p-5 rounded-2xl transition-all duration-300 cursor-default"
+                          style={{
+                            background: item.highlight
+                              ? `linear-gradient(135deg, ${item.color}25, ${item.color}10)`
+                              : "rgba(255,255,255,0.04)",
+                            border: `1px solid ${item.highlight ? item.color + "50" : "rgba(255,255,255,0.07)"}`,
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = "scale(1.02)";
+                            e.currentTarget.style.borderColor = item.color + "80";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = "scale(1)";
+                            e.currentTarget.style.borderColor = item.highlight
+                              ? item.color + "50"
+                              : "rgba(255,255,255,0.07)";
+                          }}
+                        >
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="text-2xl">{item.emoji}</span>
+                            <span
+                              className="font-montserrat font-black text-base"
+                              style={{ color: "#F0F0FF" }}
+                            >
+                              {item.title}
+                            </span>
+                          </div>
+                          <p
+                            className="text-sm leading-relaxed"
+                            style={{ color: "rgba(240,240,255,0.55)" }}
+                          >
+                            {item.desc}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* MOBILE layout */}
+                    <div
+                      className="flex md:hidden gap-4 w-full p-4 rounded-2xl transition-all duration-300"
+                      style={{
+                        background: item.highlight
+                          ? `linear-gradient(135deg, ${item.color}20, ${item.color}08)`
+                          : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${item.highlight ? item.color + "40" : "rgba(255,255,255,0.07)"}`,
+                      }}
+                    >
+                      <div className="flex flex-col items-center gap-1 flex-shrink-0">
+                        <div
+                          className="w-11 h-11 rounded-xl flex items-center justify-center"
+                          style={{
+                            background: `${item.color}20`,
+                            border: `1.5px solid ${item.color}60`,
+                          }}
+                        >
+                          <Icon name={item.icon} size={18} style={{ color: item.color }} fallback="Star" />
+                        </div>
+                        <span
+                          className="font-montserrat font-black text-xs"
+                          style={{ color: item.color }}
+                        >
+                          {item.time}
+                        </span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-lg">{item.emoji}</span>
+                          <span
+                            className="font-montserrat font-bold text-sm"
+                            style={{ color: "#F0F0FF" }}
+                          >
+                            {item.title}
+                          </span>
+                        </div>
+                        <p
+                          className="text-xs leading-relaxed"
+                          style={{ color: "rgba(240,240,255,0.55)" }}
+                        >
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Что взять с собой */}
+          <div
+            className="mt-16 p-8 rounded-3xl"
+            style={{
+              background: "linear-gradient(135deg, rgba(255,107,53,0.1), rgba(168,85,247,0.1))",
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-3xl">🎒</span>
+              <h3
+                className="font-montserrat font-black text-xl"
+                style={{ color: "#F0F0FF" }}
+              >
+                Что взять с собой
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { emoji: "💻", title: "Ноутбук", desc: "Нужен для настройки рабочего места и практической части" },
+                { emoji: "🪪", title: "Паспорт", desc: "Потребуется для оформления пропуска в офис" },
+                { emoji: "😊", title: "Хорошее настроение", desc: "Самое главное — мы ждём вас с открытым сердцем!" },
+              ].map((item) => (
                 <div
-                  key={i}
-                  className="relative flex gap-6 md:gap-10 p-5 md:p-6 rounded-2xl transition-all duration-300 group"
+                  key={item.title}
+                  className="flex gap-4 p-4 rounded-2xl"
                   style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.06)";
-                    e.currentTarget.style.borderColor = `${item.color}40`;
-                    e.currentTarget.style.transform = "translateX(4px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.03)";
-                    e.currentTarget.style.borderColor =
-                      "rgba(255,255,255,0.06)";
-                    e.currentTarget.style.transform = "translateX(0)";
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.08)",
                   }}
                 >
-                  {/* Dot for timeline */}
-                  <div
-                    className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full hidden md:block"
-                    style={{
-                      background: item.color,
-                      boxShadow: `0 0 12px ${item.color}`,
-                    }}
-                  />
-
-                  {/* Time */}
-                  <div
-                    className="font-montserrat font-bold text-sm md:text-base flex-shrink-0 w-14 md:w-16 pt-1"
-                    style={{ color: item.color }}
-                  >
-                    {item.time}
-                  </div>
-
-                  {/* Icon */}
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: `${item.color}20` }}
-                  >
-                    <Icon
-                      name={item.icon}
-                      size={18}
-                      style={{ color: item.color }}
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1">
+                  <span className="text-3xl flex-shrink-0">{item.emoji}</span>
+                  <div>
                     <div
-                      className="font-montserrat font-bold text-base md:text-lg mb-1"
+                      className="font-montserrat font-bold text-sm mb-1"
                       style={{ color: "#F0F0FF" }}
                     >
                       {item.title}
                     </div>
                     <div
-                      className="text-sm leading-relaxed"
-                      style={{ color: "rgba(240,240,255,0.55)" }}
+                      className="text-xs leading-relaxed"
+                      style={{ color: "rgba(240,240,255,0.5)" }}
                     >
                       {item.desc}
                     </div>
@@ -568,15 +733,45 @@ const Index = () => {
       </section>
 
       {/* REGISTRATION */}
-      <section id="register" className="py-28 px-6">
-        <div className="max-w-2xl mx-auto">
+      <section
+        id="register"
+        className="py-28 px-6 relative overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #1a0a2e 0%, #0d1a0a 50%, #1a0d00 100%)",
+        }}
+      >
+        {/* Glow blobs */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            width: 600,
+            height: 600,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(168,85,247,0.2) 0%, transparent 70%)",
+            top: "-20%",
+            right: "-10%",
+          }}
+        />
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            width: 400,
+            height: 400,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(255,107,53,0.15) 0%, transparent 70%)",
+            bottom: "-10%",
+            left: "-5%",
+          }}
+        />
+
+        <div className="max-w-2xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <div
               className="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6"
               style={{
-                background: "rgba(168,85,247,0.15)",
-                border: "1px solid rgba(168,85,247,0.3)",
-                color: "#A855F7",
+                background: "rgba(168,85,247,0.25)",
+                border: "1px solid rgba(168,85,247,0.5)",
+                color: "#C084FC",
               }}
             >
               Участие
@@ -587,7 +782,7 @@ const Index = () => {
             >
               Зарегистрироваться
             </h2>
-            <p style={{ color: "rgba(240,240,255,0.6)" }}>
+            <p style={{ color: "rgba(240,240,255,0.65)" }}>
               Заполните форму — и мы пришлём подтверждение на вашу почту
             </p>
           </div>
@@ -595,8 +790,10 @@ const Index = () => {
           <div
             className="rounded-3xl p-8 md:p-10"
             style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: "rgba(255,255,255,0.07)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              backdropFilter: "blur(20px)",
+              boxShadow: "0 0 80px rgba(168,85,247,0.15), 0 0 40px rgba(255,107,53,0.1)",
             }}
           >
             {submitted ? (
@@ -803,22 +1000,24 @@ const Index = () => {
 
                 <button
                   type="submit"
-                  className="w-full font-montserrat font-bold py-4 rounded-xl text-white text-base transition-all duration-300"
+                  className="w-full font-montserrat font-black py-5 rounded-2xl text-white text-lg transition-all duration-300 flex items-center justify-center gap-3"
                   style={{
-                    background: "linear-gradient(135deg, #FF6B35, #A855F7)",
-                    boxShadow: "0 0 40px rgba(255,107,53,0.3)",
+                    background: "linear-gradient(135deg, #FF6B35 0%, #A855F7 100%)",
+                    boxShadow: "0 0 60px rgba(255,107,53,0.4), 0 4px 20px rgba(0,0,0,0.3)",
+                    letterSpacing: "0.02em",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.transform = "translateY(-3px)";
                     e.currentTarget.style.boxShadow =
-                      "0 8px 40px rgba(255,107,53,0.5)";
+                      "0 12px 60px rgba(255,107,53,0.6), 0 4px 20px rgba(0,0,0,0.3)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "translateY(0)";
                     e.currentTarget.style.boxShadow =
-                      "0 0 40px rgba(255,107,53,0.3)";
+                      "0 0 60px rgba(255,107,53,0.4), 0 4px 20px rgba(0,0,0,0.3)";
                   }}
                 >
+                  <Icon name="Rocket" size={20} style={{ color: "#fff" }} />
                   Подтвердить участие
                 </button>
               </form>
